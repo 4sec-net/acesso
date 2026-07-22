@@ -1,13 +1,14 @@
 # Acesso Cloud — Site institucional
 
-Landing page institucional da **Acesso Cloud**, empresa de infraestrutura em
-nuvem, hospedagem, backup e segurança para empresas brasileiras.
+Landing page institucional da **Acesso Cloud**, empresa de consultoria e
+suporte especializado em **migração para a AWS** (Amazon Web Services).
 
 ## ✨ Recursos
 
 - Site de página única, responsivo (mobile, tablet e desktop)
-- Tema escuro moderno com gradientes e microanimações
-- Seções: Hero, Serviços, Recursos/Diferenciais, Planos, Sobre e Contato
+- Tema escuro moderno com paleta AWS (laranja), gradientes e microanimações
+- Seções: Hero, Serviços, Processo (4 etapas), Diferenciais, Pacotes, Sobre e Contato
+- Contato via **WhatsApp** (botão flutuante + links) para +55 (31) 98470-3859
 - Menu mobile, contadores animados, reveal on scroll e formulário com validação
 - **Zero dependências** e **sem etapa de build** — HTML, CSS e JS puros
 

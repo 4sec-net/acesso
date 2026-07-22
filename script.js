@@ -60,7 +60,7 @@ if ("IntersectionObserver" in window) {
 
 // ===== Reveal on scroll =====
 const revealEls = document.querySelectorAll(
-  ".card, .plan, .value, .feature-list li, .stat"
+  ".card, .step, .plan, .value, .feature-list li, .stat"
 );
 revealEls.forEach((el) => {
   el.style.opacity = "0";
