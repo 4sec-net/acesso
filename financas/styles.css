@@ -21,6 +21,9 @@
 }
 
 * { box-sizing: border-box; }
+/* Garante que o atributo [hidden] sempre vença regras de display dos componentes
+   (.auth-screen, .auth-form, .modal-backdrop, .user-chip usam display:grid/flex). */
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
@@ -226,6 +229,42 @@ select.input { appearance: none; -webkit-appearance: none;
   padding: .8rem 1.2rem; font-size: .9rem; box-shadow: var(--shadow);
   z-index: 60; animation: toastIn .25s ease;
 }
+
+/* ===== User chip (header, modo nuvem) ===== */
+.user-chip { display: inline-flex; align-items: center; gap: .5rem; padding-left: .3rem; }
+.user-email { color: var(--muted); font-size: .82rem; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== Auth screen (modo nuvem) ===== */
+body.locked { overflow: hidden; }
+.auth-screen {
+  position: fixed; inset: 0; z-index: 80;
+  display: grid; place-items: center; padding: 1.2rem;
+  background:
+    radial-gradient(900px 500px at 50% -10%, rgba(255,153,0,.14), transparent 60%),
+    var(--bg);
+  animation: fade .2s ease;
+}
+.auth-card {
+  width: 100%; max-width: 400px;
+  background: linear-gradient(180deg, var(--surface), var(--bg-2));
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 1.8rem 1.6rem;
+  animation: pop .22s ease;
+}
+.auth-brand { display: flex; align-items: center; justify-content: center; gap: .6rem;
+  font-family: "Sora", sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 1.4rem; }
+.auth-form h2 { font-size: 1.25rem; margin-bottom: 1.1rem; }
+.auth-form { display: flex; flex-direction: column; gap: .9rem; }
+.auth-form .field { gap: .35rem; }
+.auth-form .hint, .auth-hint { color: var(--muted); font-size: .8rem; }
+.auth-hint { margin: -.3rem 0 .2rem; }
+.btn-block { width: 100%; }
+.auth-links { display: flex; justify-content: space-between; gap: 1rem; margin: .2rem 0 0; }
+.auth-links a { color: var(--brand); font-size: .88rem; }
+.auth-error { background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.4);
+  color: #fecaca; border-radius: 11px; padding: .6rem .8rem; font-size: .86rem; margin: 0 0 1rem; }
+.auth-foot { text-align: center; color: var(--muted); font-size: .78rem; margin: 1.3rem 0 0; }
+.auth-foot a { color: var(--brand); }
 
 @keyframes fade { from { opacity: 0; } }
 @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }

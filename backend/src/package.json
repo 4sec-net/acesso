@@ -1,0 +1,7 @@
+{
+  "name": "financas-api",
+  "version": "1.0.0",
+  "description": "Lambda da API de financas (usa o AWS SDK v3 ja incluido no runtime Node 20)",
+  "type": "module",
+  "private": true
+}

@@ -1,11 +1,14 @@
 /* Service Worker — app Finanças
    Estratégia: cache-first para o "app shell" (funciona 100% offline).
    Como os dados ficam em localStorage, não há chamadas de rede a sincronizar. */
-const CACHE = "financas-v1";
+const CACHE = "financas-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./config.js",
+  "./auth.js",
+  "./api.js",
   "./script.js",
   "./manifest.webmanifest",
   "./favicon.svg",

@@ -32,6 +32,10 @@
         <button class="btn btn-outline btn-sm" id="btnImport" type="button" title="Importar dados (JSON)">Importar</button>
         <button class="btn btn-outline btn-sm" id="btnExport" type="button" title="Exportar dados (JSON)">Exportar</button>
         <button class="btn btn-primary btn-sm" id="btnNew" type="button">+ Lançamento</button>
+        <div class="user-chip" id="userChip" hidden>
+          <span class="user-email" id="userEmail"></span>
+          <button class="btn btn-outline btn-sm" id="btnLogout" type="button" title="Sair">Sair</button>
+        </div>
       </div>
     </div>
   </header>
@@ -133,7 +137,7 @@
     </section>
 
     <footer class="app-footer">
-      <p>Seus dados ficam salvos apenas neste navegador (localStorage). Nada é enviado para servidores.</p>
+      <p id="footerNote">Seus dados ficam salvos apenas neste navegador (localStorage). Nada é enviado para servidores.</p>
       <p><a href="privacidade.html">Política de Privacidade</a></p>
     </footer>
   </main>
@@ -184,6 +188,74 @@
   <input type="file" id="importFile" accept="application/json,.json" hidden />
   <div class="toast" id="toast" hidden></div>
 
+  <!-- ===== Tela de autenticação (modo nuvem) ===== -->
+  <div class="auth-screen" id="authScreen" hidden>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="brand-mark">₣</span>
+        <span>Fin<span class="grad">anças</span></span>
+      </div>
+
+      <p class="auth-error" id="authError" hidden></p>
+
+      <!-- Login -->
+      <form class="auth-form" id="formLogin" data-screen="login">
+        <h2>Entrar</h2>
+        <label class="field"><span>E-mail</span>
+          <input type="email" class="input" id="loginEmail" autocomplete="username" required /></label>
+        <label class="field"><span>Senha</span>
+          <input type="password" class="input" id="loginPass" autocomplete="current-password" required /></label>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        <p class="auth-links">
+          <a href="#" id="toForgot">Esqueci a senha</a>
+          <a href="#" id="toSignup">Criar conta</a>
+        </p>
+      </form>
+
+      <!-- Cadastro -->
+      <form class="auth-form" id="formSignup" data-screen="signup" hidden>
+        <h2>Criar conta</h2>
+        <label class="field"><span>E-mail</span>
+          <input type="email" class="input" id="signupEmail" autocomplete="username" required /></label>
+        <label class="field"><span>Senha</span>
+          <input type="password" class="input" id="signupPass" autocomplete="new-password" minlength="8" required />
+          <small class="hint">Mínimo 8 caracteres, com letra e número.</small></label>
+        <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
+        <p class="auth-links"><a href="#" id="toLogin">Já tenho conta</a></p>
+      </form>
+
+      <!-- Confirmação de e-mail -->
+      <form class="auth-form" id="formConfirm" data-screen="confirm" hidden>
+        <h2>Confirme seu e-mail</h2>
+        <p class="auth-hint" id="confirmHint">Enviamos um código para seu e-mail.</p>
+        <label class="field"><span>Código de confirmação</span>
+          <input type="text" class="input" id="confirmCode" inputmode="numeric" autocomplete="one-time-code" required /></label>
+        <button type="submit" class="btn btn-primary btn-block">Confirmar</button>
+        <p class="auth-links"><a href="#" id="resendCode">Reenviar código</a></p>
+      </form>
+
+      <!-- Esqueci a senha -->
+      <form class="auth-form" id="formForgot" data-screen="forgot" hidden>
+        <h2>Redefinir senha</h2>
+        <label class="field"><span>E-mail</span>
+          <input type="email" class="input" id="forgotEmail" autocomplete="username" required /></label>
+        <div id="forgotStep2" hidden>
+          <label class="field"><span>Código recebido por e-mail</span>
+            <input type="text" class="input" id="forgotCode" inputmode="numeric" /></label>
+          <label class="field"><span>Nova senha</span>
+            <input type="password" class="input" id="forgotPass" autocomplete="new-password" minlength="8" /></label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="forgotSubmit">Enviar código</button>
+        <p class="auth-links"><a href="#" id="forgotToLogin">Voltar ao login</a></p>
+      </form>
+
+      <p class="auth-foot">Seus dados ficam protegidos na sua conta. <a href="privacidade.html">Privacidade</a></p>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="api.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
