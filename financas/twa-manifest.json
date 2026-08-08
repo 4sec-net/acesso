@@ -1,0 +1,44 @@
+{
+  "packageId": "com.acessocloud.financas",
+  "host": "SEU-DOMINIO.com.br",
+  "name": "Finanças — Controle financeiro pessoal",
+  "launcherName": "Finanças",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#0b1120",
+  "themeColorDark": "#0b1120",
+  "navigationColor": "#0b1120",
+  "navigationColorDark": "#0b1120",
+  "navigationDividerColor": "#0b1120",
+  "navigationDividerColorDark": "#0b1120",
+  "backgroundColor": "#0b1120",
+  "enableNotifications": false,
+  "startUrl": "/financas/?source=twa",
+  "iconUrl": "https://SEU-DOMINIO.com.br/financas/icons/icon-512.png",
+  "maskableIconUrl": "https://SEU-DOMINIO.com.br/financas/icons/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "financas"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "Novo lançamento",
+      "shortName": "Lançar",
+      "url": "/financas/?action=new",
+      "chosenIconUrl": "https://SEU-DOMINIO.com.br/financas/icons/icon-192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://SEU-DOMINIO.com.br/financas/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://SEU-DOMINIO.com.br/financas/",
+  "minSdkVersion": 21,
+  "orientation": "portrait"
+}

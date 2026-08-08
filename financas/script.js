@@ -439,4 +439,16 @@
   transactions = load();
   bind();
   render();
+
+  // Atalho do app (manifest shortcut): abre direto o modal de novo lançamento.
+  if (new URLSearchParams(location.search).get("action") === "new") {
+    openModal(null);
+  }
 })();
+
+/* ---------- PWA: registro do Service Worker ---------- */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch(() => {});
+  });
+}
