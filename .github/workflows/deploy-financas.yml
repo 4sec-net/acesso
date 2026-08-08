@@ -1,0 +1,67 @@
+name: Deploy Finanças (AWS)
+
+# Faz o deploy do app de finanças na AWS (infra + frontend) automaticamente.
+# Autenticação via OIDC (sem chaves de longa duração). O job só roda depois que
+# a variável AWS_ROLE_ARN estiver configurada no repositório — ver backend/CI-DEPLOY.md.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/programa-financas-5zqxs2
+      - claude/acesso-cloud-website-089pbc
+    paths:
+      - "financas/**"
+      - "backend/**"
+      - ".github/workflows/deploy-financas.yml"
+
+permissions:
+  id-token: write   # necessário para o OIDC
+  contents: read
+
+concurrency:
+  group: financas-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Trava de segurança: sem o papel configurado, o workflow não tenta nada.
+    if: ${{ vars.AWS_ROLE_ARN != '' }}
+    runs-on: ubuntu-latest
+    env:
+      STACK_NAME: ${{ vars.STACK_NAME || 'financas' }}
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar credenciais AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Instalar AWS SAM CLI
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Deploy da infraestrutura (Cognito + API + DynamoDB + S3 + CloudFront)
+        working-directory: backend
+        env:
+          DOMAIN: ${{ vars.APP_DOMAIN }}
+          CERT_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN }}
+        run: ./deploy.sh "$STACK_NAME"
+
+      - name: Publicar o app (S3 + config.js + invalidação do CloudFront)
+        working-directory: backend
+        run: ./deploy-frontend.sh "$STACK_NAME"
+
+      - name: Resumo
+        run: |
+          echo "### Deploy concluído :rocket:" >> "$GITHUB_STEP_SUMMARY"
+          aws cloudformation describe-stacks --stack-name "$STACK_NAME" \
+            --region "$AWS_REGION" \
+            --query "Stacks[0].Outputs[?OutputKey=='AppUrl'].OutputValue" \
+            --output text >> "$GITHUB_STEP_SUMMARY" || true

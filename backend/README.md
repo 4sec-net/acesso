@@ -33,6 +33,9 @@ cd backend
 ./deploy-frontend.sh        # use o mesmo nome de stack do passo 1
 ```
 
+> **Prefere deploy automático?** Configure o OIDC uma vez e o GitHub Actions passa
+> a fazer o deploy a cada push — ver [`CI-DEPLOY.md`](CI-DEPLOY.md).
+
 Ao final, o endereço público do app (CloudFront) é exibido no terminal.
 A região padrão é `us-east-1`; para outra, use `AWS_REGION=sa-east-1 ./deploy.sh`.
 
