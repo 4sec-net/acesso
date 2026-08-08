@@ -71,7 +71,8 @@ Corpo (POST/PUT):
    ./deploy.sh minha-stack   # após editar o parâmetro, ou:
    sam deploy --parameter-overrides AllowedOrigin=https://SEU_ID.cloudfront.net
    ```
-2. (Opcional) **Domínio próprio** no CloudFront + certificado no ACM.
+2. **Domínio próprio** (`financas.acessocloud.com.br`) no CloudFront + certificado
+   no ACM — passo a passo em [`DOMINIO.md`](DOMINIO.md).
 3. Para o **app Android (Play Store / sideload)**, veja
    [`../financas/GUIA-PLAYSTORE.md`](../financas/GUIA-PLAYSTORE.md). Com hospedagem
    própria (CloudFront/seu domínio), o `assetlinks.json` já é publicado na raiz

@@ -8,6 +8,15 @@ STACK="${1:-financas}"
 REGION="${AWS_REGION:-us-east-1}"
 cd "$(dirname "$0")"
 
+# Domínio próprio (opcional): exporte antes de rodar, ex.:
+#   export DOMAIN=financas.acessocloud.com.br
+#   export CERT_ARN=arn:aws:acm:us-east-1:123456789012:certificate/xxxx
+#   export ALLOWED_ORIGIN=https://financas.acessocloud.com.br
+PARAMS=()
+[ -n "${ALLOWED_ORIGIN:-}" ] && PARAMS+=("AllowedOrigin=$ALLOWED_ORIGIN")
+[ -n "${DOMAIN:-}" ]         && PARAMS+=("DomainName=$DOMAIN")
+[ -n "${CERT_ARN:-}" ]       && PARAMS+=("CertificateArn=$CERT_ARN")
+
 echo "==> sam build"
 sam build
 
@@ -18,7 +27,8 @@ sam deploy \
   --capabilities CAPABILITY_IAM \
   --resolve-s3 \
   --no-confirm-changeset \
-  --no-fail-on-empty-changeset
+  --no-fail-on-empty-changeset \
+  ${PARAMS:+--parameter-overrides "${PARAMS[@]}"}
 
 echo
 echo "==> Saídas da stack:"

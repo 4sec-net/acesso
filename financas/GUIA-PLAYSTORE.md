@@ -23,37 +23,16 @@ do código de `financas/` — não há reescrita.
 
 ---
 
-## 1) Hospedar o PWA na internet
+## 1) Hospedar o PWA na internet (AWS)
 
-A TWA **carrega o app de uma URL pública HTTPS**. Você precisa publicar a pasta
-do site em algum lugar. Duas opções:
+O app é publicado na AWS (S3 + CloudFront) no domínio
+**`https://financas.acessocloud.com.br`**. O passo a passo completo de
+certificado + DNS + deploy está em [`../backend/DOMINIO.md`](../backend/DOMINIO.md).
 
-### Opção A — GitHub Pages (grátis, já configurável neste repo)
-Depois do merge para a branch de deploy, o app fica em:
-
-```
-https://4sec-net.github.io/acesso/financas/
-```
-
-⚠️ **Atenção — Digital Asset Links:** o arquivo de verificação precisa ficar na
-**raiz do domínio (origin)**, ou seja em
-`https://4sec-net.github.io/.well-known/assetlinks.json`. Como o `github.io` é
-compartilhado, isso exige um repositório chamado `4sec-net.github.io`. Por isso,
-para TWA, **recomendamos um domínio próprio** (Opção B).
-
-### Opção B — Domínio próprio (recomendado para TWA)
-Ex.: `financas.acessocloud.com.br` apontando para GitHub Pages / Netlify / Vercel.
-Aí você controla a raiz e o `assetlinks.json` fica em:
-
-```
-https://financas.acessocloud.com.br/.well-known/assetlinks.json
-```
-
-Substitua `SEU-DOMINIO.com.br` nos arquivos `twa-manifest.json` e
-`.well-known/assetlinks.json` pelo domínio escolhido.
-
-> Se preferir **não hospedar nada**, o caminho é usar **Capacitor** em vez de TWA
-> (o app embute os arquivos e não precisa de servidor). Me avise que eu monto.
+Resumo: após o `./deploy.sh` e o `./deploy-frontend.sh`, o app fica em
+`https://financas.acessocloud.com.br` e o arquivo de verificação em
+`https://financas.acessocloud.com.br/.well-known/assetlinks.json` (publicado
+automaticamente). Esse é o pré-requisito para a TWA ficar sem barra de URL.
 
 ---
 
@@ -71,7 +50,7 @@ Num terminal, dentro de uma pasta vazia:
 
 ```bash
 # 3.1 – inicializar a partir do manifest do PWA já hospedado
-bubblewrap init --manifest="https://SEU-DOMINIO.com.br/financas/manifest.webmanifest"
+bubblewrap init --manifest="https://financas.acessocloud.com.br/manifest.webmanifest"
 ```
 
 Responda as perguntas (ou aproveite os valores já prontos em
@@ -82,8 +61,8 @@ Responda as perguntas (ou aproveite os valores já prontos em
 - **Display mode:** `standalone`
 - **Orientation:** `portrait`
 - **Status bar / theme color:** `#0b1120`
-- **Ícone:** `https://SEU-DOMINIO.com.br/financas/icons/icon-512.png`
-- **Maskable icon:** `https://SEU-DOMINIO.com.br/financas/icons/maskable-512.png`
+- **Ícone:** `https://financas.acessocloud.com.br/icons/icon-512.png`
+- **Maskable icon:** `https://financas.acessocloud.com.br/icons/maskable-512.png`
 
 Na primeira vez ele cria a **chave de assinatura** (keystore). **GUARDE MUITO
 BEM** o arquivo `android.keystore` e as senhas — sem eles você não consegue
@@ -115,7 +94,7 @@ Sem isso, o app abre com uma barrinha de endereço do Chrome. Para remover:
 2. Cole esse SHA-256 em `.well-known/assetlinks.json` no lugar de
    `SUBSTITUA_PELO_SHA256_...`.
 3. Publique o `assetlinks.json` no seu domínio, acessível em
-   `https://SEU-DOMINIO/.well-known/assetlinks.json` (sem redirecionamento,
+   `https://financas.acessocloud.com.br/.well-known/assetlinks.json` (sem redirecionamento,
    `Content-Type: application/json`).
 4. Confira em: https://developers.google.com/digital-asset-links/tools/generator
 

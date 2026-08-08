@@ -1,6 +1,6 @@
 {
   "packageId": "com.acessocloud.financas",
-  "host": "SEU-DOMINIO.com.br",
+  "host": "financas.acessocloud.com.br",
   "name": "Finanças — Controle financeiro pessoal",
   "launcherName": "Finanças",
   "display": "standalone",
@@ -13,9 +13,9 @@
   "navigationDividerColorDark": "#0b1120",
   "backgroundColor": "#0b1120",
   "enableNotifications": false,
-  "startUrl": "/financas/?source=twa",
-  "iconUrl": "https://SEU-DOMINIO.com.br/financas/icons/icon-512.png",
-  "maskableIconUrl": "https://SEU-DOMINIO.com.br/financas/icons/maskable-512.png",
+  "startUrl": "/?source=twa",
+  "iconUrl": "https://financas.acessocloud.com.br/icons/icon-512.png",
+  "maskableIconUrl": "https://financas.acessocloud.com.br/icons/maskable-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "./android.keystore",
@@ -27,18 +27,18 @@
     {
       "name": "Novo lançamento",
       "shortName": "Lançar",
-      "url": "/financas/?action=new",
-      "chosenIconUrl": "https://SEU-DOMINIO.com.br/financas/icons/icon-192.png"
+      "url": "/?action=new",
+      "chosenIconUrl": "https://financas.acessocloud.com.br/icons/icon-192.png"
     }
   ],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://SEU-DOMINIO.com.br/financas/manifest.webmanifest",
+  "webManifestUrl": "https://financas.acessocloud.com.br/manifest.webmanifest",
   "fallbackType": "customtabs",
   "features": {},
   "enableSiteSettingsShortcut": true,
   "isChromeOSOnly": false,
   "isMetaQuest": false,
-  "fullScopeUrl": "https://SEU-DOMINIO.com.br/financas/",
+  "fullScopeUrl": "https://financas.acessocloud.com.br/",
   "minSdkVersion": 21,
   "orientation": "portrait"
 }

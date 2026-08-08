@@ -9,8 +9,25 @@ Parameters:
     Type: String
     Default: "*"
     Description: >
-      Origem permitida no CORS da API. Recomenda-se restringir depois do 1º deploy
-      para a URL do CloudFront (ex.: https://xxxx.cloudfront.net).
+      Origem permitida no CORS da API. Recomenda-se restringir para a URL do app
+      (ex.: https://financas.acessocloud.com.br) após configurar o domínio.
+  DomainName:
+    Type: String
+    Default: ""
+    Description: >
+      (Opcional) Domínio próprio do app, ex.: financas.acessocloud.com.br.
+      Deixe vazio para usar apenas o domínio padrão do CloudFront.
+  CertificateArn:
+    Type: String
+    Default: ""
+    Description: >
+      (Opcional) ARN de um certificado do ACM em us-east-1 cobrindo o DomainName.
+      Obrigatório se DomainName for informado.
+
+Conditions:
+  HasCustomDomain: !And
+    - !Not [!Equals [!Ref DomainName, ""]]
+    - !Not [!Equals [!Ref CertificateArn, ""]]
 
 Globals:
   Function:
@@ -157,6 +174,13 @@ Resources:
         Enabled: true
         DefaultRootObject: index.html
         PriceClass: PriceClass_100
+        Aliases: !If [HasCustomDomain, [!Ref DomainName], !Ref "AWS::NoValue"]
+        ViewerCertificate: !If
+          - HasCustomDomain
+          - AcmCertificateArn: !Ref CertificateArn
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
         Origins:
           - Id: s3origin
             DomainName: !GetAtt SiteBucket.RegionalDomainName
@@ -206,5 +230,11 @@ Outputs:
   DistributionId:
     Value: !Ref Distribution
   CloudFrontUrl:
-    Description: Endereço público do app
+    Description: Domínio padrão do CloudFront (use no CNAME do seu DNS)
     Value: !Sub "https://${Distribution.DomainName}"
+  CloudFrontDomain:
+    Description: Host do CloudFront (destino do CNAME)
+    Value: !GetAtt Distribution.DomainName
+  AppUrl:
+    Description: Endereço final do app
+    Value: !If [HasCustomDomain, !Sub "https://${DomainName}", !Sub "https://${Distribution.DomainName}"]
