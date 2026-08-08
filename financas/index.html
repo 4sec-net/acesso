@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finanças — Controle financeiro pessoal</title>
+  <meta name="description" content="Programa de finanças pessoais: registre receitas e despesas, acompanhe seu saldo, categorias e evolução mensal. Sem dependências, dados salvos no seu navegador." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="app-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">
+        <span class="brand-mark">₣</span>
+        <span class="brand-text">Fin<span class="grad">anças</span></span>
+      </a>
+      <div class="header-actions">
+        <button class="btn btn-outline btn-sm" id="btnImport" type="button" title="Importar dados (JSON)">Importar</button>
+        <button class="btn btn-outline btn-sm" id="btnExport" type="button" title="Exportar dados (JSON)">Exportar</button>
+        <button class="btn btn-primary btn-sm" id="btnNew" type="button">+ Lançamento</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container app-main">
+    <!-- ===== Controls / filtro mensal ===== -->
+    <section class="toolbar">
+      <div class="month-nav">
+        <button class="icon-btn" id="prevMonth" type="button" aria-label="Mês anterior">‹</button>
+        <h1 class="month-title" id="monthLabel">—</h1>
+        <button class="icon-btn" id="nextMonth" type="button" aria-label="Próximo mês">›</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btnToday" type="button">Mês atual</button>
+    </section>
+
+    <!-- ===== Resumo / cards ===== -->
+    <section class="cards">
+      <article class="card card-balance">
+        <span class="card-label">Saldo do mês</span>
+        <strong class="card-value" id="sumBalance">R$ 0,00</strong>
+        <span class="card-hint" id="balanceHint">Sem lançamentos</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Receitas <em class="dot dot-in"></em></span>
+        <strong class="card-value pos" id="sumIncome">R$ 0,00</strong>
+        <span class="card-hint" id="incomeCount">0 lançamentos</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Despesas <em class="dot dot-out"></em></span>
+        <strong class="card-value neg" id="sumExpense">R$ 0,00</strong>
+        <span class="card-hint" id="expenseCount">0 lançamentos</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Taxa de economia</span>
+        <strong class="card-value" id="savingRate">—</strong>
+        <span class="card-hint">receitas guardadas</span>
+      </article>
+    </section>
+
+    <!-- ===== Gráficos ===== -->
+    <section class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Despesas por categoria</h2>
+        </div>
+        <div class="donut-wrap" id="donutWrap">
+          <svg viewBox="0 0 42 42" class="donut" id="donut" aria-hidden="true"></svg>
+          <div class="donut-center">
+            <span class="donut-total" id="donutTotal">R$ 0,00</span>
+            <span class="donut-sub">em despesas</span>
+          </div>
+        </div>
+        <ul class="legend" id="legend"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Evolução (6 meses)</h2>
+        </div>
+        <div class="bars" id="bars"></div>
+        <div class="bars-legend">
+          <span><em class="dot dot-in"></em> Receitas</span>
+          <span><em class="dot dot-out"></em> Despesas</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Lançamentos ===== -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Lançamentos</h2>
+        <div class="filters">
+          <input type="search" id="search" class="input input-sm" placeholder="Buscar…" aria-label="Buscar lançamentos" />
+          <select id="filterType" class="input input-sm" aria-label="Filtrar por tipo">
+            <option value="all">Todos</option>
+            <option value="income">Receitas</option>
+            <option value="expense">Despesas</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Categoria</th>
+              <th class="col-date">Data</th>
+              <th class="col-amount">Valor</th>
+              <th class="col-actions" aria-label="Ações"></th>
+            </tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="emptyState" hidden>
+        <p>Nenhum lançamento neste mês.</p>
+        <button class="btn btn-primary btn-sm" id="btnEmptyNew" type="button">+ Adicionar o primeiro</button>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>Seus dados ficam salvos apenas neste navegador (localStorage). Nada é enviado para servidores.</p>
+    </footer>
+  </main>
+
+  <!-- ===== Modal lançamento ===== -->
+  <div class="modal-backdrop" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h3 id="modalTitle">Novo lançamento</h3>
+        <button class="icon-btn" id="closeModal" type="button" aria-label="Fechar">×</button>
+      </div>
+      <form id="txForm" class="tx-form" novalidate>
+        <input type="hidden" id="txId" />
+        <div class="seg" role="tablist" aria-label="Tipo de lançamento">
+          <button type="button" class="seg-btn is-active" data-type="expense" id="segExpense">Despesa</button>
+          <button type="button" class="seg-btn" data-type="income" id="segIncome">Receita</button>
+        </div>
+
+        <label class="field">
+          <span>Descrição</span>
+          <input type="text" id="fDesc" class="input" placeholder="Ex.: Mercado, Salário…" required maxlength="80" />
+        </label>
+
+        <div class="field-row">
+          <label class="field">
+            <span>Valor (R$)</span>
+            <input type="number" id="fAmount" class="input" placeholder="0,00" step="0.01" min="0.01" inputmode="decimal" required />
+          </label>
+          <label class="field">
+            <span>Data</span>
+            <input type="date" id="fDate" class="input" required />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Categoria</span>
+          <select id="fCategory" class="input"></select>
+        </label>
+
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="cancelModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="importFile" accept="application/json,.json" hidden />
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

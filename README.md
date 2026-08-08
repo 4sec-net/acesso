@@ -46,6 +46,28 @@ Depois acesse `http://localhost:8000`.
 - **Contato:** ajuste e-mail e telefone na seção `#contato`. O formulário hoje
   faz validação no cliente; conecte a um backend/serviço de e-mail para envio real.
 
+## 💰 Programa de Finanças (`/financas`)
+
+Aplicativo de **controle financeiro pessoal**, também 100% estático e sem
+dependências, seguindo o mesmo design system do site.
+
+- Registre **receitas** e **despesas** com descrição, valor, data e categoria
+- **Dashboard** com saldo do mês, totais e taxa de economia
+- **Gráfico de rosca** de despesas por categoria e **barras** dos últimos 6 meses
+- Navegação **mês a mês**, busca e filtro por tipo
+- **Editar/excluir** lançamentos e **importar/exportar** backup em JSON
+- Dados salvos localmente no navegador (`localStorage`) — nada vai para servidores
+
+Abra `financas/index.html` no navegador (ou acesse `/financas` quando publicado).
+
+```
+financas/
+├── index.html    # Estrutura do app
+├── styles.css    # Estilos (mesmos tokens do site)
+├── script.js     # Lógica: lançamentos, gráficos, persistência, import/export
+└── favicon.svg
+```
+
 ## 🌐 Deploy
 
 Por ser 100% estático, pode ser publicado em qualquer host estático:
